@@ -2,17 +2,218 @@
 
 <PageTitle>Country Game</PageTitle>
 
-<h1>This is a country Quiz Game</h1>
+<h1>This is a Country Quiz Game</h1>
 
+
+@if (countryHint != null)
+{
+    
+    <input type="text" @bind="InputValue"/>
+    <button @onclick="GuessManager">Guess</button>
+    
+    if (countryHint.Contains("flag"))
+    {
+        string flagUrl = countryHint.Split(" ")[6];
+        string hintText = countryHint.Split(":")[0];
+        <p>@hintText</p>
+        <img src="@flagUrl"/>
+    }
+    else
+    {
+    <p><strong>@countryHint</strong></p>
+    }
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@if (guessCheck)
+{
+    <span style="color: lawngreen"><strong>Correct!</strong>!</span>
+}
+else if (!guessCheck && guessCounter != 0)
+{
+    if (extraCountryHint != null)
+    {
+        if (extraCountryHint.Contains("flag"))
+        {
+            string flagUrl = extraCountryHint.Split(" ")[6];
+            string hintText = extraCountryHint.Split(":")[0];
+            <p><strong>Extra Hint!</strong> @hintText</p>
+            <img src="@flagUrl"/>
+        }
+        else
+        {
+            <p><strong>Extra Hint!</strong> @extraCountryHint</p>
+        }
+    }
+    <span style="color: red"><strong>Incorrect!</strong>!</span>
+}
+
+<br/>
+<h3><strong>Guessed Countries: (@guessedCountries.Count/@allCountries.Count)</strong></h3>
+@foreach (CountryClass country in guessedCountries)
+{
+<p>@country.name.common</p>
+}
 
 @code {
+    private string? InputValue { get; set; } = "";
+    
+    private string countryHint { get; set; }
+    private string extraCountryHint { get; set; } = null;
+    
+    private bool guessCheck { get; set; }
+
+    private int guessCounter = 0;
+    private int wrongGuesses = 0;
+    
+    private List<CountryClass> allCountries = new List<CountryClass>();
+    private List<CountryClass> guessedCountries = new List<CountryClass>();
+
+    private CountryClass currentCountry = new CountryClass();
+
+    private Dictionary<int, string> countryHints = new Dictionary<int, string>()
+    {
+        { 0, "This country has a population of: " },
+        { 1, "The capital of this country is: " },
+        { 2, "The Top Level Domain of this country is: " },
+        { 3, "This country is referred to short as:  " },
+        { 4, "This country has an area of (km^2): " },
+        { 5, "The flag of this country is: " }
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            
+            await populateCountryList();
+            await CountryHint();
         }
     }
 
+    private async Task populateCountryList()
+    {
+        ApiService apiService = new ApiService();
+        allCountries = await apiService.GetDataAsync();
+    }
+    
+    private async Task GuessManager()
+    {
+        if (InputValue == "")
+        {
+            return;
+        }
+        string guess = InputValue.Trim().ToLower();
+        string CountryToGuess = this.currentCountry.name.common.Trim().ToLower();
+
+        guessCounter++;
+
+        if (CountryToGuess == guess)
+        {
+            guessCheck = true;
+            wrongGuesses = 0;
+            guessedCountries.Add(currentCountry);
+            await CountryHint();
+            InputValue = "";
+            extraCountryHint = null;
+            StateHasChanged();
+        }
+        else
+        {
+            wrongGuesses++;
+            guessCheck = false;
+            StateHasChanged();
+
+            if (wrongGuesses == 3)
+            {
+                await ExtraCountryHint();
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task CountryHint()
+    {
+        Random rng = new Random();
+        int chosenCountryNumber = rng.Next(0, allCountries.Count());
+        int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
+        string hintData = "";
+
+        currentCountry = allCountries[chosenCountryNumber];
+
+        string ChosenHint = countryHints[chosenHintNumber];
+
+        if (!guessedCountries.Contains(currentCountry))
+        {
+            switch (chosenHintNumber)
+            {
+                case 0:
+                    hintData = (int.Parse(currentCountry.population)).ToString("N0");
+                    break;
+                case 1:
+                    hintData = currentCountry.capital[0];
+                    break;
+                case 2:
+                    hintData = currentCountry.tld[0];
+                    break;
+                case 3:
+                    hintData = currentCountry.altSpellings[0];
+                    break;
+                case 4:
+                    hintData = (double.Parse(currentCountry.area)).ToString("N0");
+                    break;
+                case 5:
+                    hintData = currentCountry.flags.png;
+                    break;
+                default:
+                    break;
+            }
+
+            countryHint = $"{ChosenHint}{hintData}";
+            StateHasChanged();
+        }
+        else
+        {
+            await CountryHint();
+        }
+    }
+    
+    private async Task ExtraCountryHint()
+    {
+        Random rng = new Random();
+        int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
+        string hintData = "";
+        string ChosenHint = countryHints[chosenHintNumber];
+        
+        switch (chosenHintNumber)
+        {
+            case 0:
+                hintData = currentCountry.population;
+                break;
+            case 1:
+                hintData = currentCountry.capital[0];
+                break;
+            case 2:
+                hintData = currentCountry.tld[0];
+                break;
+            case 3:
+                hintData = currentCountry.altSpellings[0];
+                break;
+            case 4:
+                hintData = currentCountry.area;
+                break;
+            case 5:
+                hintData = currentCountry.flags.png;
+                break;
+            default:
+                break;
+        }
+        extraCountryHint = $"{ChosenHint}{hintData}";
+        if (extraCountryHint == countryHint)
+        {
+            await ExtraCountryHint();
+        }
+    }
 }
