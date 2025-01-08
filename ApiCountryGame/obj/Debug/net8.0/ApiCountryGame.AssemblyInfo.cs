@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiCountryGame")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+537eee0a5b8eb271e57726ad678331269e977013")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5f1281cc371c85e0228fcd9ed169a4138e3eb6d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiCountryGame")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiCountryGame")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
