@@ -59,3 +59,6 @@ C:\Users\Alexander\RiderProjects\h2-api-game\ApiCountryGame\obj\Debug\net8.0\Api
 C:\Users\Alexander\RiderProjects\h2-api-game\ApiCountryGame\obj\Debug\net8.0\ApiCountryGame.genruntimeconfig.cache
 C:\Users\Alexander\RiderProjects\h2-api-game\ApiCountryGame\obj\Debug\net8.0\ref\ApiCountryGame.dll
 C:\Users\Alexander\RiderProjects\h2-api-game\ApiCountryGame\obj\Debug\net8.0\ApiCountryGame.csproj.AssemblyReference.cache
+C:\Users\ary\Desktop\Skole\h2-api-game\ApiCountryGame\obj\Debug\net8.0\ApiCountryGame.csproj.AssemblyReference.cache
+C:\Users\ary\Desktop\Skole\h2-api-game\ApiCountryGame\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\ary\Desktop\Skole\h2-api-game\ApiCountryGame\obj\Debug\net8.0\ApiCount.FA629049.Up2Date
