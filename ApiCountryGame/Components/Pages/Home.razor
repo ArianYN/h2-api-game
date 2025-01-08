@@ -8,7 +8,7 @@
 @if (countryHint != null)
 {
     
-    <input type="text" @bind="InputValue"/>
+    <input type="text" @bind="InputValue" @onkeyup="EnterKey"/>
     <button @onclick="GuessManager">Guess</button>
     
     if (countryHint.Contains("flag"))
@@ -66,6 +66,8 @@ else if (!guessCheck && guessCounter != 0)
     
     private bool guessCheck { get; set; }
 
+    private string previousHint { get; set; }
+    
     private int guessCounter = 0;
     private int wrongGuesses = 0;
     
@@ -142,9 +144,11 @@ else if (!guessCheck && guessCounter != 0)
         string hintData = "";
 
         currentCountry = allCountries[chosenCountryNumber];
-
+        
         string ChosenHint = countryHints[chosenHintNumber];
 
+        previousHint = ChosenHint;
+        
         if (!guessedCountries.Contains(currentCountry))
         {
             switch (chosenHintNumber)
@@ -186,11 +190,16 @@ else if (!guessCheck && guessCounter != 0)
         int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
         string hintData = "";
         string ChosenHint = countryHints[chosenHintNumber];
+
+        if (ChosenHint == previousHint)
+        {
+            await ExtraCountryHint();
+        }
         
         switch (chosenHintNumber)
         {
             case 0:
-                hintData = currentCountry.population;
+                hintData = (int.Parse(currentCountry.population)).ToString("N0");
                 break;
             case 1:
                 hintData = currentCountry.capital[0];
@@ -202,7 +211,7 @@ else if (!guessCheck && guessCounter != 0)
                 hintData = currentCountry.altSpellings[0];
                 break;
             case 4:
-                hintData = currentCountry.area;
+                hintData = (double.Parse(currentCountry.area)).ToString("N0");
                 break;
             case 5:
                 hintData = currentCountry.flags.png;
@@ -214,6 +223,14 @@ else if (!guessCheck && guessCounter != 0)
         if (extraCountryHint == countryHint)
         {
             await ExtraCountryHint();
+        }
+    }
+
+    private async Task EnterKey(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await GuessManager();
         }
     }
 }
