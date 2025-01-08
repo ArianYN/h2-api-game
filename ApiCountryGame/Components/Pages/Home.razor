@@ -2,14 +2,15 @@
 
 <PageTitle>Country Game</PageTitle>
 
-<h1>This is a Country Quiz Game</h1>
+<div class="center-container">
+    <h1 class="h1-title">Country Quiz Game</h1>
 
 
 @if (countryHint != null)
 {
     
-    <input type="text" @bind="InputValue" @onkeyup="EnterKey"/>
-    <button @onclick="GuessManager">Guess</button>
+    <input type="text" @bind="InputValue" @onkeyup="EnterKey" class="InputField" placeholder="Enter Your Guess"/>
+    <button @onclick="GuessManager" class="btn-guess">Guess</button>
     
     if (countryHint.Contains("flag"))
     {
@@ -57,6 +58,7 @@ else if (!guessCheck && guessCounter != 0)
 {
 <p>@country.name.common</p>
 }
+</div>
 
 @code {
     private string? InputValue { get; set; } = "";
@@ -234,3 +236,63 @@ else if (!guessCheck && guessCounter != 0)
         }
     }
 }
+
+<style>
+    .center-container {
+        min-height: 100vh;
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+         
+        padding: 1rem;
+    }
+    
+    .h1-title {
+        color: black;
+        font-family: sans-serif;
+        margin-bottom: 50px;
+    }
+    
+    .InputField {
+        width: 30em;
+        padding: 20px;
+        font-size: 1em;
+        font-weight: 600;
+        border-radius: 1em;
+        border: 2px solid #D1E9F3; 
+        background-color: #EEF7FB; 
+        color: #333333;
+        transition: box-shadow 0.3s ease;
+        margin-bottom: 1rem; 
+    }
+
+    .InputField:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(209, 233, 243, 0.4);
+    }
+
+    /* Button */
+    .btn-guess {
+        width: 10em;
+        padding: 20px;
+        border: none;
+        border-radius: 1em;
+        background-color: #3091ff; 
+        color: #fff;
+        font-size: 1em;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 30px;
+        
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-guess:hover {
+        background-color: #9EB9E0; 
+        transform: translateY(-2px);
+    }
+
+</style>

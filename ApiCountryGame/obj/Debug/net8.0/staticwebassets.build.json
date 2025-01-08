@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0q6LupgbJSxAUT9c+ER2Wj8l2sOkzFkJLkhyAlYmuIY=",
+  "Hash": "dui6mMZho7MmbDzuxlRVn2jwI4FnWnFvI2LSWZijhTs=",
   "Source": "ApiCountryGame",
   "BasePath": "_content/ApiCountryGame",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "ApiCountryGame\\wwwroot",
       "Source": "ApiCountryGame",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\",
       "BasePath": "_content/ApiCountryGame",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ApiCountryGame.styles.css",
+      "Identity": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ApiCountryGame.styles.css",
       "SourceId": "ApiCountryGame",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\bundle\\",
       "BasePath": "_content/ApiCountryGame",
       "RelativePath": "ApiCountryGame.styles.css",
       "AssetKind": "All",
@@ -33,13 +33,13 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ApiCountryGame.styles.css"
+      "OriginalItemSpec": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ApiCountryGame.styles.css"
     },
     {
-      "Identity": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ApiCountryGame.bundle.scp.css",
+      "Identity": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ApiCountryGame.bundle.scp.css",
       "SourceId": "ApiCountryGame",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/ApiCountryGame",
       "RelativePath": "ApiCountryGame.bundle.scp.css",
       "AssetKind": "All",
@@ -52,13 +52,13 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ApiCountryGame.bundle.scp.css"
+      "OriginalItemSpec": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ApiCountryGame.bundle.scp.css"
     },
     {
-      "Identity": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\app.css",
+      "Identity": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\app.css",
       "SourceId": "ApiCountryGame",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\",
       "BasePath": "_content/ApiCountryGame",
       "RelativePath": "app.css",
       "AssetKind": "All",
@@ -74,10 +74,10 @@
       "OriginalItemSpec": "wwwroot\\app.css"
     },
     {
-      "Identity": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "Identity": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\bootstrap\\bootstrap.min.css",
       "SourceId": "ApiCountryGame",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\",
       "BasePath": "_content/ApiCountryGame",
       "RelativePath": "bootstrap/bootstrap.min.css",
       "AssetKind": "All",
@@ -93,10 +93,10 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Identity": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "Identity": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\bootstrap\\bootstrap.min.css.map",
       "SourceId": "ApiCountryGame",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\",
       "BasePath": "_content/ApiCountryGame",
       "RelativePath": "bootstrap/bootstrap.min.css.map",
       "AssetKind": "All",
@@ -112,10 +112,10 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\favicon.png",
+      "Identity": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\favicon.png",
       "SourceId": "ApiCountryGame",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\wwwroot\\",
       "BasePath": "_content/ApiCountryGame",
       "RelativePath": "favicon.png",
       "AssetKind": "All",
