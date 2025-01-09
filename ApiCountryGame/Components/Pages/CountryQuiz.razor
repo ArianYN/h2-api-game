@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager NavManager
 
 <PageTitle>Country Game</PageTitle>
 
@@ -6,74 +7,123 @@
     <h1 class="h1-title">Country Quiz Game</h1>
 
 
-@if (countryHint != null)
-{
-    
-    <input type="text" @bind="InputValue" @onkeyup="EnterKey" class="InputField" placeholder="Enter Your Guess"/>
-    <button @onclick="GuessManager" class="btn-guess">Guess</button>
-    
-    if (countryHint.Contains("flag"))
+    @if (countryHint != null)
     {
-        string flagUrl = countryHint.Split(" ")[6];
-        string hintText = countryHint.Split(":")[0];
-        <p>@hintText</p>
-        <img src="@flagUrl"/>
-    }
-    else
-    {
-    <p><strong>@countryHint</strong></p>
-    }
-}
-else
-{
-    <p>Loading...</p>
-}
+        <input type="text" @bind="InputValue" @onkeyup="EnterKey" class="InputField" placeholder="Enter Your Guess"/>
+        <button @onclick="GuessManager" class="btn-guess">Guess</button>
 
-@if (guessCheck)
-{
-    <span style="color: lawngreen"><strong>Correct!</strong>!</span>
-}
-else if (!guessCheck && guessCounter != 0)
-{
-    if (extraCountryHint != null)
-    {
-        if (extraCountryHint.Contains("flag"))
+        if (countryHint.Contains("flag"))
         {
-            string flagUrl = extraCountryHint.Split(" ")[6];
-            string hintText = extraCountryHint.Split(":")[0];
-            <p><strong>Extra Hint!</strong> @hintText</p>
+            string flagUrl = countryHint.Split(" ")[6];
+            string hintText = countryHint.Split(":")[0];
+            <p>@hintText</p>
             <img src="@flagUrl"/>
         }
         else
         {
-            <p><strong>Extra Hint!</strong> @extraCountryHint</p>
+            <p><strong>@countryHint</strong></p>
         }
     }
-    <span style="color: red"><strong>Incorrect!</strong>!</span>
+    else
+    {
+        <span class="loader"></span>
+    }
+
+    @if (guessCheck)
+    {
+        <span style="color: lawngreen"><strong>Correct!</strong></span>
+    }
+    else if (!guessCheck && guessCounter != 0)
+    {
+        if (extraCountryHint != null)
+        {
+            if (extraCountryHint.Contains("flag"))
+            {
+                string flagUrl = extraCountryHint.Split(" ")[6];
+                string hintText = extraCountryHint.Split(":")[0];
+                <p><strong>Extra Hint!</strong> @hintText</p>
+                <img src="@flagUrl"/>
+            }
+            else
+            {
+                <p><strong>Extra Hint!</strong> @extraCountryHint</p>
+            }
+        }
+
+        <span style="color: red"><strong>Incorrect!</strong></span>
+    }
+
+    <br/>
+    <h3><strong>Guessed Countries: (@guessedCountries.Count/@allCountries.Count)</strong></h3>
+    @foreach (CountryClass country in guessedCountries)
+    {
+        <p>@country.name.common</p>
+    }
+</div>
+
+@if (victory)
+{
+    <div class="modal show d-block" tabindex="-1" role="dialog" data-bs-theme="dark">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Victory</h5>
+                    <div class="modal-body bg-dark text-white">
+                        <p>WOW! You are amazing. Want to try again or Exit?</p>
+                    </div>
+                    <div class="modal-footer bg-dark text-white">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                style="background-color: rgba(255,0,0,0.57)"
+                                @onclick="CloseModal">
+                            Exit Game
+                        </button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                style="background-color: rgba(160,255,104,0.77)"
+                                @onclick="ReloadPage">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop fade show"></div>
 }
 
-<br/>
-<h3><strong>Guessed Countries: (@guessedCountries.Count/@allCountries.Count)</strong></h3>
-@foreach (CountryClass country in guessedCountries)
-{
-<p>@country.name.common</p>
-}
-</div>
 
 @code {
     private string? InputValue { get; set; } = "";
     private bool victory = false;
-    
+
     private string countryHint { get; set; }
     private string extraCountryHint { get; set; } = null;
-    
+
     private bool guessCheck { get; set; }
 
     private string previousHint { get; set; }
-    
+
     private int guessCounter = 0;
     private int wrongGuesses = 0;
-    
+
+
+    private void ShowVictoryModal()
+    {
+        victory = true;
+    }
+
+    private void CloseModal()
+    {
+        victory = false;
+    }
+
+    public void ReloadPage()
+    {
+        NavManager.NavigateTo(NavManager.Uri, true);
+    }
+
     private List<CountryClass> allCountries = new List<CountryClass>();
     private List<CountryClass> guessedCountries = new List<CountryClass>();
 
@@ -103,7 +153,7 @@ else if (!guessCheck && guessCounter != 0)
         ApiService apiService = new ApiService();
         allCountries = await apiService.GetDataAsync();
     }
-    
+
     private async Task GuessManager()
     {
         try
@@ -114,13 +164,13 @@ else if (!guessCheck && guessCounter != 0)
                 StateHasChanged();
                 return;
             }
-            
+
             if (InputValue == "")
             {
                 return;
             }
-            //string guess = InputValue.Trim().ToLower(); // UNCOMMENT
-            string guess = currentCountry.name.common.ToString().ToLower(); // REMOVE
+
+            string guess = InputValue.Trim().ToLower();
             string CountryToGuess = this.currentCountry.name.common.Trim().ToLower();
 
             guessCounter++;
@@ -131,7 +181,7 @@ else if (!guessCheck && guessCounter != 0)
                 wrongGuesses = 0;
                 guessedCountries.Add(currentCountry);
                 await CountryHint();
-                //InputValue = ""; // UNCOMMENT 
+                InputValue = "";
                 extraCountryHint = null;
                 StateHasChanged();
             }
@@ -153,7 +203,6 @@ else if (!guessCheck && guessCounter != 0)
             Console.WriteLine(e);
             await GuessManager();
         }
-       
     }
 
     private async Task CountryHint()
@@ -166,17 +215,18 @@ else if (!guessCheck && guessCounter != 0)
                 StateHasChanged();
                 return;
             }
+
             Random rng = new Random();
             int chosenCountryNumber = rng.Next(0, allCountries.Count());
-            int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
+            int chosenHintNumber = rng.Next(0, countryHints.Last().Key + 1);
             string hintData = "";
 
             currentCountry = allCountries[chosenCountryNumber];
-        
+
             string ChosenHint = countryHints[chosenHintNumber];
 
             previousHint = ChosenHint;
-        
+
             if (!guessedCountries.Contains(currentCountry))
             {
                 switch (chosenHintNumber)
@@ -212,21 +262,20 @@ else if (!guessCheck && guessCounter != 0)
             }
         }
         catch (Exception e)
-        
-        
+
+
         {
             Console.WriteLine(e);
             await CountryHint();
         }
-     
     }
-    
+
     private async Task ExtraCountryHint()
     {
         try
         {
             Random rng = new Random();
-            int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
+            int chosenHintNumber = rng.Next(0, countryHints.Last().Key + 1);
             string hintData = "";
             string ChosenHint = countryHints[chosenHintNumber];
 
@@ -234,7 +283,7 @@ else if (!guessCheck && guessCounter != 0)
             {
                 await ExtraCountryHint();
             }
-        
+
             switch (chosenHintNumber)
             {
                 case 0:
@@ -258,6 +307,7 @@ else if (!guessCheck && guessCounter != 0)
                 default:
                     break;
             }
+
             extraCountryHint = $"{ChosenHint}{hintData}";
             if (extraCountryHint == countryHint)
             {
@@ -269,7 +319,6 @@ else if (!guessCheck && guessCounter != 0)
             Console.WriteLine(e);
             await ExtraCountryHint();
         }
-       
     }
 
     private async Task EnterKey(KeyboardEventArgs e)
@@ -279,6 +328,7 @@ else if (!guessCheck && guessCounter != 0)
             await GuessManager();
         }
     }
+
 }
 
 <style>
@@ -290,27 +340,48 @@ else if (!guessCheck && guessCounter != 0)
         flex-direction: column;
         justify-content: center;
         align-items: center;
-         
+
         padding: 1rem;
     }
-    
+
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #FFF;
+        border-bottom-color: #FF3D00;
+        border-radius: 50%;
+        display: block;
+        margin: auto;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @@keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
     .h1-title {
         color: black;
         font-family: sans-serif;
         margin-bottom: 50px;
     }
-    
+
     .InputField {
         width: 30em;
         padding: 20px;
         font-size: 1em;
         font-weight: 600;
         border-radius: 1em;
-        border: 2px solid #D1E9F3; 
-        background-color: #EEF7FB; 
+        border: 2px solid #D1E9F3;
+        background-color: #EEF7FB;
         color: #333333;
         transition: box-shadow 0.3s ease;
-        margin-bottom: 1rem; 
+        margin-bottom: 1rem;
     }
 
     .InputField:focus {
@@ -324,18 +395,18 @@ else if (!guessCheck && guessCounter != 0)
         padding: 20px;
         border: none;
         border-radius: 1em;
-        background-color: #3091ff; 
+        background-color: #3091ff;
         color: #fff;
         font-size: 1em;
         font-weight: 600;
         cursor: pointer;
         margin-bottom: 30px;
-        
+
         transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     .btn-guess:hover {
-        background-color: #9EB9E0; 
+        background-color: #9EB9E0;
         transform: translateY(-2px);
     }
 

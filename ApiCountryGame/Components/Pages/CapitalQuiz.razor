@@ -1,10 +1,290 @@
 ﻿@page "/capitalquiz"
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavManager
 
 <PageTitle>Capital Quiz</PageTitle>
+<h1>Capital Quiz</h1>
 
+@if (buttonColors.Count() == 4)
+{
+    <div class="box">
+        <div class="text">
+            <strong>@currentCountryQuestion</strong>
+        </div>
+        <img class="flag-img" src="@currentCountry.flags.png"/>
 
+        <div class="button-container">
+            @foreach (CountryClass country in capitalGuessButtonsText)
+            {
+                <button
+                    style="background-color: @buttonColors[country.capital[0]]"
+                    class="@country.capital[0]"
+                    @onclick="() => HandleGuess(country)">
+                    @country.capital[0]
+                </button>
+            }
+        </div>
+        <br/>
+        <span class="correct-counter"><strong>(@guessedCountries.Count()/@allCountries.Count())</strong></span>
+    </div>
+}
+else
+{
+    <span class="loader"></span>
+}
+
+@if (guessCorrect)
+{
+    <span class="guess-response correct"><strong>Correct!</strong></span>
+}
+@if (guessIncorrect)
+{
+    <span class="guess-response incorrect"><strong>Incorrect!</strong></span>
+    
+    <div class="modal show d-block" tabindex="-1" role="dialog" data-bs-theme="dark">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Game Over</h5>
+                    <div class="modal-body bg-dark text-white">
+                        <p> You reached a streak of: <strong>@guessedCountries.Count()</strong></p>
+                    </div>
+                    <div class="modal-footer bg-dark text-white">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                style="background-color: rgba(160,255,104,0.77)"
+                                @onclick="ReloadPage">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop fade show"></div>
+    
+}
 
 @code {
-  
+    private List<CountryClass> allCountries = new List<CountryClass>();
+    private List<CountryClass> guessedCountries = new List<CountryClass>();
 
+    private bool guessCorrect = false;
+    private bool guessIncorrect = false;
+
+    private string btnDefaultColor = "#9a9a9a";
+    private string btnCorrectColor = "#51cb1f";
+    private string btnIncorrectColor = "#cb1f1f";
+    private Dictionary<string, string> buttonColors = new Dictionary<string, string>();
+    
+    private string currentCountryQuestion = String.Empty;
+    private CountryClass currentCountry = new CountryClass();
+    
+    private List<CountryClass> capitalGuessButtonsText = new List<CountryClass>();
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await populateCountryList();
+            await CreateQuestion();
+        }
+    }
+    
+    private async Task populateCountryList()
+    {
+        ApiService apiService = new ApiService();
+        allCountries = await apiService.GetDataAsync();
+    }
+
+    private async Task CreateQuestion()
+    {
+        try
+        {
+            Random rng = new Random();
+            currentCountry = allCountries[rng.Next(0, allCountries.Count())];
+            if (guessedCountries.Contains(currentCountry))
+            {
+                await CreateQuestion();
+                return;
+            }
+            currentCountryQuestion = $"What is the capital of {currentCountry.name.common}";
+            
+            await CreateCapitalButtons();
+            
+            buttonColors.Clear();
+            foreach (CountryClass country in capitalGuessButtonsText)
+            {
+                buttonColors[country.capital[0]] = btnDefaultColor;
+            }
+            
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            await CreateQuestion();
+        }
+    }
+
+    private async Task CreateCapitalButtons()
+    {
+        Random rng = new Random();
+        CountryClass previousWrongCountry = new CountryClass();
+        capitalGuessButtonsText.Clear();
+        
+        for (int i = 0; i <= 3; i++)
+        {
+            CountryClass wrongCountry = null;
+            while ((wrongCountry == currentCountry || wrongCountry == null) && wrongCountry != previousWrongCountry)
+            {
+                wrongCountry = allCountries[rng.Next(0, allCountries.Count)];
+                previousWrongCountry = wrongCountry;
+            }
+
+            capitalGuessButtonsText.Add(wrongCountry);
+        }
+
+        int index = rng.Next(0, 3);
+        capitalGuessButtonsText.RemoveAt(index);
+        capitalGuessButtonsText.Insert(index, currentCountry);
+        
+        StateHasChanged();
+    }
+
+    private async Task HandleGuess(CountryClass countryGuess)
+    {
+        guessCorrect = false;
+        guessIncorrect = false;
+
+        if (countryGuess.capital[0] == currentCountry.capital[0])
+        {
+            guessCorrect = true;
+            buttonColors[countryGuess.capital[0]] = btnCorrectColor;
+            guessedCountries.Add(countryGuess);
+            await CreateQuestion();
+        }
+        else
+        {
+            guessIncorrect = true;
+            buttonColors[countryGuess.capital[0]] = btnIncorrectColor;
+        }
+
+        StateHasChanged();
+    }
+
+    public void ReloadPage()
+    {
+        NavManager.NavigateTo(NavManager.Uri, true);
+    }
 }
+
+<style>
+    body {
+        background-color: #eef2f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #FFF;
+        border-bottom-color: #FF3D00;
+        border-radius: 50%;
+        display: block;
+        margin: auto;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @@keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-top: 40px;
+    }
+
+    .box {
+        width: 320px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 40px auto;
+        background-color: #fff;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .text {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .flag-img {
+        width: 70%;
+        height: auto;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .button-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .button-container button {
+        width: 130px;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    .button-container button:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+    }
+
+    .button-container button:active {
+        transform: translateY(1px);
+    }
+
+    .guess-response {
+        font-size: 18px;
+        font-weight: bold;
+        display: block;
+        margin-top: 20px;
+    }
+    
+    .correct-counter {
+        margin: auto;
+    }
+
+    .guess-response.correct {
+        color: #4CAF50;
+        text-align: center;
+    }
+
+    .guess-response.incorrect {
+        color: #e74c3c;
+        text-align: center;
+    }
+</style>
