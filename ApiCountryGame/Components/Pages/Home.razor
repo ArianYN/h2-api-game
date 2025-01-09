@@ -62,6 +62,7 @@ else if (!guessCheck && guessCounter != 0)
 
 @code {
     private string? InputValue { get; set; } = "";
+    private bool victory = false;
     
     private string countryHint { get; set; }
     private string extraCountryHint { get; set; } = null;
@@ -105,54 +106,135 @@ else if (!guessCheck && guessCounter != 0)
     
     private async Task GuessManager()
     {
-        if (InputValue == "")
+        try
         {
-            return;
-        }
-        string guess = InputValue.Trim().ToLower();
-        string CountryToGuess = this.currentCountry.name.common.Trim().ToLower();
-
-        guessCounter++;
-
-        if (CountryToGuess == guess)
-        {
-            guessCheck = true;
-            wrongGuesses = 0;
-            guessedCountries.Add(currentCountry);
-            await CountryHint();
-            InputValue = "";
-            extraCountryHint = null;
-            StateHasChanged();
-        }
-        else
-        {
-            wrongGuesses++;
-            guessCheck = false;
-            StateHasChanged();
-
-            if (wrongGuesses == 3)
+            if (guessedCountries.Count() == allCountries.Count())
             {
-                await ExtraCountryHint();
+                victory = true;
+                StateHasChanged();
+                return;
+            }
+            
+            if (InputValue == "")
+            {
+                return;
+            }
+            //string guess = InputValue.Trim().ToLower(); // UNCOMMENT
+            string guess = currentCountry.name.common.ToString().ToLower(); // REMOVE
+            string CountryToGuess = this.currentCountry.name.common.Trim().ToLower();
+
+            guessCounter++;
+
+            if (CountryToGuess == guess)
+            {
+                guessCheck = true;
+                wrongGuesses = 0;
+                guessedCountries.Add(currentCountry);
+                await CountryHint();
+                //InputValue = ""; // UNCOMMENT 
+                extraCountryHint = null;
                 StateHasChanged();
             }
+            else
+            {
+                wrongGuesses++;
+                guessCheck = false;
+                StateHasChanged();
+
+                if (wrongGuesses == 3)
+                {
+                    await ExtraCountryHint();
+                    StateHasChanged();
+                }
+            }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            await GuessManager();
+        }
+       
     }
 
     private async Task CountryHint()
     {
-        Random rng = new Random();
-        int chosenCountryNumber = rng.Next(0, allCountries.Count());
-        int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
-        string hintData = "";
-
-        currentCountry = allCountries[chosenCountryNumber];
-        
-        string ChosenHint = countryHints[chosenHintNumber];
-
-        previousHint = ChosenHint;
-        
-        if (!guessedCountries.Contains(currentCountry))
+        try
         {
+            if (guessedCountries.Count() == allCountries.Count())
+            {
+                victory = true;
+                StateHasChanged();
+                return;
+            }
+            Random rng = new Random();
+            int chosenCountryNumber = rng.Next(0, allCountries.Count());
+            int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
+            string hintData = "";
+
+            currentCountry = allCountries[chosenCountryNumber];
+        
+            string ChosenHint = countryHints[chosenHintNumber];
+
+            previousHint = ChosenHint;
+        
+            if (!guessedCountries.Contains(currentCountry))
+            {
+                switch (chosenHintNumber)
+                {
+                    case 0:
+                        hintData = (int.Parse(currentCountry.population)).ToString("N0");
+                        break;
+                    case 1:
+                        hintData = currentCountry.capital[0];
+                        break;
+                    case 2:
+                        hintData = currentCountry.tld[0];
+                        break;
+                    case 3:
+                        hintData = currentCountry.altSpellings[0];
+                        break;
+                    case 4:
+                        hintData = currentCountry.area;
+                        break;
+                    case 5:
+                        hintData = currentCountry.flags.png;
+                        break;
+                    default:
+                        break;
+                }
+
+                countryHint = $"{ChosenHint}{hintData}";
+                StateHasChanged();
+            }
+            else
+            {
+                await CountryHint();
+            }
+        }
+        catch (Exception e)
+        
+        
+        {
+            Console.WriteLine(e);
+            await CountryHint();
+        }
+     
+    }
+    
+    private async Task ExtraCountryHint()
+    {
+        try
+        {
+            Random rng = new Random();
+            int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
+            string hintData = "";
+            string ChosenHint = countryHints[chosenHintNumber];
+
+            if (ChosenHint == previousHint)
+            {
+                await ExtraCountryHint();
+            }
+        
             switch (chosenHintNumber)
             {
                 case 0:
@@ -168,7 +250,7 @@ else if (!guessCheck && guessCounter != 0)
                     hintData = currentCountry.altSpellings[0];
                     break;
                 case 4:
-                    hintData = (double.Parse(currentCountry.area)).ToString("N0");
+                    hintData = currentCountry.area;
                     break;
                 case 5:
                     hintData = currentCountry.flags.png;
@@ -176,56 +258,18 @@ else if (!guessCheck && guessCounter != 0)
                 default:
                     break;
             }
-
-            countryHint = $"{ChosenHint}{hintData}";
-            StateHasChanged();
+            extraCountryHint = $"{ChosenHint}{hintData}";
+            if (extraCountryHint == countryHint)
+            {
+                await ExtraCountryHint();
+            }
         }
-        else
+        catch (Exception e)
         {
-            await CountryHint();
-        }
-    }
-    
-    private async Task ExtraCountryHint()
-    {
-        Random rng = new Random();
-        int chosenHintNumber = rng.Next(0, countryHints.Last().Key+1);
-        string hintData = "";
-        string ChosenHint = countryHints[chosenHintNumber];
-
-        if (ChosenHint == previousHint)
-        {
+            Console.WriteLine(e);
             await ExtraCountryHint();
         }
-        
-        switch (chosenHintNumber)
-        {
-            case 0:
-                hintData = (int.Parse(currentCountry.population)).ToString("N0");
-                break;
-            case 1:
-                hintData = currentCountry.capital[0];
-                break;
-            case 2:
-                hintData = currentCountry.tld[0];
-                break;
-            case 3:
-                hintData = currentCountry.altSpellings[0];
-                break;
-            case 4:
-                hintData = (double.Parse(currentCountry.area)).ToString("N0");
-                break;
-            case 5:
-                hintData = currentCountry.flags.png;
-                break;
-            default:
-                break;
-        }
-        extraCountryHint = $"{ChosenHint}{hintData}";
-        if (extraCountryHint == countryHint)
-        {
-            await ExtraCountryHint();
-        }
+       
     }
 
     private async Task EnterKey(KeyboardEventArgs e)
