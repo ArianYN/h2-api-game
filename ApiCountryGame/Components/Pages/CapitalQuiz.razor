@@ -1,10 +1,103 @@
 ﻿@page "/capitalquiz"
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Maps
+@inject IJSRuntime JSRuntime
+@using Components
 
 <PageTitle>Capital Quiz</PageTitle>
 
+<SfMaps Height="940px" Width="1700">
+    <MapsEvents OnClick="@OnClickEvent"></MapsEvents>
+    <MapsLayers>
+        <MapsLayer ShapeData='new { dataOptions = "https://cdn.syncfusion.com/maps/map-data/world-map.json" }'
+                   ShapePropertyPath='new string[] { "name" }'
+                   DataSource="chosenCountries"
+                   ShapeDataPath="Name" TValue="CountryClass">
+            @* To add data labels *@
+            <MapsLayerTooltipSettings Visible='true' ValuePath="Name"></MapsLayerTooltipSettings>
+        </MapsLayer>
+    </MapsLayers>
+</SfMaps>
 
+@if (isDialogVisible)
+{
+    <div class="modal show d-block" tabindex="-1" role="dialog" data-bs-theme="dark">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">What is the capital of @currentClickedCountry.name.common</h5>
+                    <div class="modal-body bg-dark text-white">
+                    </div>
+                    <div class="modal-footer bg-dark text-white">
+                        @* <button type="button" *@
+                        @*         class="btn btn-secondary" *@
+                        @*         style="background-color: rgba(160,255,104,0.77)" *@
+                        @*         @onclick="ReloadPage"> *@
+                        @*     Try Again *@
+                        @* </button> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop fade show"></div>
+}
+<script>
+    window.getPathData = (pathId) => {
+        const pathElement = document.getElementById(pathId);
+        if (pathElement) {
+            return pathElement.getAttribute('aria-label'); // Extracts the `d` attribute
+        }
+        return null;
+    };
+</script>
 
 @code {
-  
+    public List<CountryClass> chosenCountries { get; set; } = new List<CountryClass>();
+    private bool isDialogVisible = false;
+    private string modalContent = string.Empty;
+    private CountryClass currentClickedCountry = new CountryClass();
+    
+    private async Task PopulateList()
+    {
+        try
+        {
+            ApiService apiService = new ApiService();
+            List<CountryClass> allCountries = await apiService.GetDataAsync();
+            chosenCountries = allCountries;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching countries: {{ex.Message}}");
+        }
+    }
+    
+    // onclick event handler
+    public async Task OnClickEvent(Syncfusion.Blazor.Maps.MouseEventArgs args)
+    {
+        string clickedCountryName = await JSRuntime.InvokeAsync<string>("getPathData", args.Target.ID.ToString());
+        
+        if (!string.IsNullOrEmpty(clickedCountryName))
+        {
+            CountryClass clickedCountry = new CountryClass();
+            foreach (CountryClass country in chosenCountries)
+            {
+                if (country.name.common == clickedCountryName)
+                {
+                    clickedCountry = country;
+                    break;
+                }
+            }
 
+            currentClickedCountry = clickedCountry;
+            isDialogVisible = true;
+
+        }
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await PopulateList();
+    }
 }

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Syncfusion.Blazor.Maps" Version="28.1.38" />
     </ItemGroup>
 
 </Project>

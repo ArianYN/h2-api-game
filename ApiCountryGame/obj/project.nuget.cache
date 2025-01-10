@@ -1,10 +1,29 @@
 {
   "version": 2,
-  "dgSpecHash": "WPx1r8w4kjM=",
+  "dgSpecHash": "LTQdk6puM90=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ary\\Desktop\\Skole\\h2-api-game\\ApiCountryGame\\ApiCountryGame.csproj",
+  "projectFilePath": "C:\\Users\\Alexander\\RiderProjects\\h2-api-game\\ApiCountryGame\\ApiCountryGame.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ary\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.10\\microsoft.aspnetcore.authorization.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.aspnetcore.components\\8.0.10\\microsoft.aspnetcore.components.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\8.0.10\\microsoft.aspnetcore.components.analyzers.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\8.0.10\\microsoft.aspnetcore.components.forms.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.aspnetcore.components.web\\8.0.10\\microsoft.aspnetcore.components.web.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.aspnetcore.metadata\\8.0.10\\microsoft.aspnetcore.metadata.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.1\\microsoft.extensions.dependencyinjection.8.0.1.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.extensions.options\\8.0.2\\microsoft.extensions.options.8.0.2.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\microsoft.jsinterop\\8.0.10\\microsoft.jsinterop.8.0.10.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\syncfusion.blazor.core\\28.1.38\\syncfusion.blazor.core.28.1.38.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\syncfusion.blazor.data\\28.1.38\\syncfusion.blazor.data.28.1.38.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\syncfusion.blazor.maps\\28.1.38\\syncfusion.blazor.maps.28.1.38.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\syncfusion.licensing\\28.1.38\\syncfusion.licensing.28.1.38.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\syncfusion.pdfexport.net.core\\28.1.38\\syncfusion.pdfexport.net.core.28.1.38.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512",
+    "C:\\Users\\Alexander\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512"
   ],
   "logs": []
 }
